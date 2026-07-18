@@ -1,0 +1,42 @@
+{
+  "summary": "Backend: 16/16 pytest cases passed against public URL (auth, docs CRUD, chat w/ citations, search, clusters, KG, lit-review, research-gaps, hypothesis). Frontend: end-to-end UI flow validated — landing renders, register→/app redirect, all 8 sidebar nav routes work, document upload via file picker adds a row, chat returns Claude Sonnet 4.5 answer with [1] citation chip and Sources list.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/auth/register", "issue": "Pydantic EmailStr rejects the spec's test domain '@researchmind.test' (reserved TLD) with HTTP 422. Spec said to use that pattern — either update spec to use @example.com OR relax EmailStr (EmailStr(allowed_special_use=True)) / use plain str + custom validation."},
+      {"endpoint": "GET /api/clusters, /api/knowledge-graph, /api/literature-review, /api/research-gaps, /api/hypothesis", "issue": "These do synchronous Claude calls in request thread; response latencies are 15–40s. No timeout/streaming. Consider background tasks or websocket streaming for production."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Chat", "issues": ["Confidence badge 30% may look low even on a good answer because formula = mean(score). Consider rescaling."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_researchmind.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Either change registration email validator to accept .test TLD or document that .test/.example/.invalid TLDs are blocked; UI uses @example.com fine.",
+    "Optional: cache LLM calls for clusters/KG (KG already caches; add for clusters/review) to speed retries."
+  ],
+  "critical_code_review_comments": [
+    "server.py — chat_send/clusters/etc do LLM calls in request path; FastAPI default timeout could break behind some proxies. Consider streaming responses.",
+    "llm_service.py — _extract_json finds first '{' and last '}'; if both '{' and '[' appear it always prefers '{', may mis-parse arrays-at-top-level (acceptable here since all schemas are objects).",
+    "auth.py — JWT_SECRET hard-required from env (good). bcrypt used correctly. No refresh-token rotation (acceptable for MVP).",
+    "server.py — uses @app.on_event('shutdown') which is deprecated in FastAPI; switch to lifespan handler.",
+    "server.py — full_text capped at 200000 chars; chunks stored in document doc — Mongo 16MB limit could be hit on very large PDFs. Consider GridFS for full_text."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_researchmind.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Registered ephemeral users via /api/auth/register (email pattern uitest_<uuid>@example.com / TestPass123!). No persistent admin needed.",
+  "seed_data_creation": "None — each test run registers a new user and uploads sample .txt content.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Reuse /app/backend/tests/test_researchmind.py. IMPORTANT: must use @example.com (not @*.test) due to pydantic EmailStr reserved-TLD rejection. LLM-backed tests (chat, clusters, KG, literature-review, research-gaps, hypothesis) take 15–40s each; total suite ~2m10s.",
+  "rca_of_the_issue": "N/A — no failures after switching test email domain."
+}

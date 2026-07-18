@@ -1,0 +1,152 @@
+{
+  "brand": {
+    "name": "ResearchMind AI",
+    "domain": "AI Research & Knowledge Discovery SaaS",
+    "theme": "Dark",
+    "archetype": "Archetype 5 (Luxury) + Archetype 4 (Swiss & High-Contrast)",
+    "vibe": "Cinematic, moody, technical, highly polished, premium (Inspired by Notion, Perplexity, Linear, Vercel).",
+    "design_principles": [
+      "Fusion over Imitation: Mix technical precision with cinematic luxury.",
+      "Emotion First: The UI should feel like a powerful, quiet command center.",
+      "Content is King: Documents, citations, and AI insights take priority over decorative elements.",
+      "Negative Space: Use generous padding (p-6, p-8) to give complex data room to breathe.",
+      "Contrast: Crisp 1px borders against soft dark gradients."
+    ]
+  },
+  "colors": {
+    "base": {
+      "background": "#0A0A0A",
+      "surface": "#111111",
+      "surface_elevated": "#1A1A1A"
+    },
+    "accents": {
+      "primary": "#6366F1",
+      "primary_hover": "#818CF8",
+      "secondary": "#34D399",
+      "warning": "#FBBF24",
+      "error": "#F87171"
+    },
+    "text": {
+      "primary": "#F8FAFC",
+      "secondary": "#94A3B8",
+      "tertiary": "#64748B",
+      "inverse": "#0F172A"
+    },
+    "borders": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "hover": "rgba(255, 255, 255, 0.2)"
+    },
+    "tailwind_classes": {
+      "bg_app": "bg-slate-950",
+      "bg_surface": "bg-slate-900/50",
+      "text_main": "text-slate-50",
+      "text_muted": "text-slate-400",
+      "border_subtle": "border-white/10",
+      "glassmorphism": "bg-black/60 backdrop-blur-2xl backdrop-saturate-150 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)]"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headings": "Cabinet Grotesk, sans-serif",
+      "body": "Satoshi, sans-serif",
+      "mono": "JetBrains Mono, monospace"
+    },
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl lg:text-6xl tracking-tighter font-medium text-slate-50",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl tracking-tight font-medium text-slate-50",
+      "h3": "text-xl sm:text-2xl tracking-tight font-medium text-slate-100",
+      "body": "text-base leading-relaxed text-slate-300",
+      "small": "text-sm text-slate-400",
+      "overline": "text-xs uppercase tracking-[0.2em] font-semibold text-indigo-400"
+    },
+    "rules": [
+      "Do not use Inter, Roboto, or Open Sans for headings.",
+      "Never center headings by default; maintain structural left-alignment for dashboards.",
+      "Use mono font for citations, document IDs, metadata, and data metrics."
+    ]
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "Use Tailwind p-4, p-6, p-8 for cards. Use py-24 or py-32 for marketing sections.",
+    "marketing_grid": "Mode A: 'Tetris' Grid. Wide gaps (gap-8), massive asymmetry.",
+    "dashboard_grid": "Mode B: 'Control Room' Grid. Dense gaps (gap-4). Col-span logic based on widget importance.",
+    "rules": [
+      "Mobile-first: always start with grid-cols-1.",
+      "Containers with borders MUST have internal padding (p-6) to prevent text collision.",
+      "Grid items must be direct children of grid containers."
+    ]
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-indigo-500 hover:bg-indigo-400 text-white rounded-md transition-all duration-200 shadow-[0_0_15px_rgba(99,102,241,0.3)]",
+      "secondary": "bg-white/5 hover:bg-white/10 text-slate-200 border border-white/10 rounded-md transition-all",
+      "ghost": "hover:bg-white/5 text-slate-300 hover:text-white rounded-md transition-all"
+    },
+    "cards": {
+      "default": "bg-[#111111] border border-white/10 rounded-xl overflow-hidden",
+      "hover_effect": "hover:-translate-y-1 hover:border-white/20 hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300",
+      "glass": "bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl"
+    },
+    "navigation": {
+      "header": "fixed top-0 w-full z-50 bg-black/60 backdrop-blur-2xl backdrop-saturate-150 border-b border-white/10",
+      "sidebar": "w-64 border-r border-white/10 bg-[#0A0A0A] h-screen flex flex-col"
+    },
+    "forms": {
+      "input": "bg-slate-900 border border-white/10 rounded-md text-slate-100 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all placeholder:text-slate-600",
+      "label": "text-sm font-medium text-slate-300 mb-1.5 block"
+    }
+  },
+  "specific_features": {
+    "knowledge_graph": {
+      "library": "react-force-graph-2d or react-force-graph-3d",
+      "style": "Canvas background transparent. Nodes use primary (indigo) and secondary (emerald) colors. Edges are white/20. Hovering a node highlights its connections and fades others."
+    },
+    "ai_research_chat": {
+      "layout": "Right sidebar or split pane.",
+      "user_bubble": "bg-white/5 border border-white/10 rounded-2xl rounded-tr-sm p-4 text-slate-200",
+      "ai_bubble": "bg-transparent border-none p-4 text-slate-100",
+      "citations": "Inline mono-font tags (e.g., [1], [2]) styling as small rounded badges (bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500/40 cursor-pointer)."
+    },
+    "topic_clustering": {
+      "style": "Bento-grid cards representing topics. Use subtle radial gradients in the background of cards to denote volume/heat of the topic."
+    },
+    "document_detail": {
+      "layout": "Two-column layout: Left (Document text/PDF view), Right (Extracted metadata, Entities, AI Chat)."
+    }
+  },
+  "motion_and_interactions": {
+    "hover_states": "Always explicitly set text color on hover. Increase brightness of borders.",
+    "focus_states": "Must have higher contrast. Use focus:ring-1 focus:ring-indigo-500.",
+    "transitions": "Use specific properties: transition-[transform,opacity,border-color,box-shadow] duration-200 ease-out.",
+    "accessibility": "Respect prefers-reduced-motion. All interactive elements MUST have data-testid attributes."
+  },
+  "media_and_assets": {
+    "icons": "lucide-react (Standard UI), @phosphor-icons/react (for duotone/premium marketing moments)",
+    "images": {
+      "hero_background": {
+        "url": "https://images.pexels.com/photos/30766684/pexels-photo-30766684.png",
+        "description": "3D geometric nodes network. Use with a bg-black/70 overlay to ensure text readability."
+      },
+      "texture_overlay": {
+        "url": "https://images.pexels.com/photos/16295420/pexels-photo-16295420.jpeg",
+        "description": "Dark glass/rain texture. Use as a fixed background with mix-blend-overlay and 10% opacity for atmospheric depth."
+      },
+      "testimonial_avatar_1": {
+        "url": "https://images.pexels.com/photos/12396627/pexels-photo-12396627.jpeg",
+        "description": "Professional portrait for user avatars or testimonials."
+      }
+    },
+    "rules": [
+      "Hero image max overlay opacity: bg-black/60 to bg-black/80 for dark mode.",
+      "Mobile images must not exceed 80vh.",
+      "Never use placeholder URLs."
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Install required libraries: lucide-react, framer-motion, react-force-graph-2d or react-force-graph-3d.",
+    "Apply data-testid to every button, input, and interactive link.",
+    "Use Shadcn UI components for complex interactions (dropdowns, dialogs), heavily styled to match the dark theme.",
+    "Marketing pages must use standard HTML/Tailwind for maximum layout flexibility (bento grids).",
+    "Ensure APCA contrast compliance, especially for dark mode text.",
+    "Do not use generic 'Inter' for headings. Use 'Cabinet Grotesk' or standard sans fallback if not available, ensuring tracking-tight."
+  ]
+}

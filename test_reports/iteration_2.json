@@ -1,0 +1,29 @@
+{
+  "summary": "Phase 2 testing (Patents, Datasets, Workspaces, Stripe Billing, Google Auth). All targeted backend endpoints and frontend UI flows passed. No regressions seen.",
+  "tested_scope": ["backend", "frontend", "auth", "integration"],
+  "passed": [
+    "POST /api/auth/register x2 created users",
+    "POST /api/workspaces created workspace with owner member",
+    "GET /api/workspaces listed user's workspace",
+    "POST /api/workspaces/{id}/invite added 2nd registered user as editor",
+    "POST /api/patents/analyze returned 403 for free user (Pro gated)",
+    "POST /api/patents/search returned 403 for free, then 200 with results[{title,number,assignee,year,abstract,relevance}] after tier->pro in Mongo",
+    "POST /api/datasets/search returned 403 for free, then 200 with 6 HuggingFace results including name/url/downloads/likes/tags",
+    "POST /api/billing/checkout-session returned valid checkout.stripe.com URL + session_id (cs_test_...)",
+    "POST /api/webhook/stripe handled invalid signature gracefully (HTTP 400, no crash)",
+    "POST /api/auth/google/session returned 401 on invalid session_id",
+    "Frontend login flow works; sidebar shows Patents/Datasets/Workspaces/Upgrade",
+    "Workspaces UI: created 'UI WS Test' via ws-name + ws-create, appears in list",
+    "Patents page: both tabs (analyze, search) render with testids",
+    "Pro gating UX: free user clicking Patents search was redirected to /app/billing as expected",
+    "Datasets page: datasets-input, datasets-search, src-huggingface all render",
+    "Billing page: $29/mo Pro plan visible with upgrade-btn",
+    "google-login button present on /auth/login page"
+  ],
+  "failed": [],
+  "action_items": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "retest_needed": false,
+  "full_testing_deferred": true,
+  "notes": "Stripe checkout URL navigation (clicking Upgrade -> Stripe checkout) not E2E clicked to avoid leaving the app domain, but backend confirms valid checkout URL is generated. Idempotent tier upgrade via /billing/status requires a real 'paid' status from Stripe which can't be simulated without real card flow; logic in code is correct (checks already_paid before updating tier)."
+}

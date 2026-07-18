@@ -592,22 +592,39 @@ except Exception as _e:
 
 app.state.db = db
 
-cors_origins = os.environ.get('CORS_ORIGINS', '*')
-allowed_origins = []
-for origin in cors_origins.split(','):
-    origin = origin.strip()
-    origin = origin.strip('"').strip("'")
-    if origin:
-        allowed_origins.append(origin)
-if not allowed_origins:
-    allowed_origins = ["*"]
+# cors_origins = os.environ.get('CORS_ORIGINS', '*')
+# allowed_origins = []
+# for origin in cors_origins.split(','):
+#     origin = origin.strip()
+#     origin = origin.strip('"').strip("'")
+#     if origin:
+#         allowed_origins.append(origin)
+# if not allowed_origins:
+#     allowed_origins = ["*"]
 
-logger.info("CORS allow_origins: %s", allowed_origins)
+# logger.info("CORS allow_origins: %s", allowed_origins)
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_credentials=True,
+#     allow_origins=allowed_origins,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+cors_origins = os.getenv("CORS_ORIGINS", "")
+
+allowed_origins = [
+    origin.strip()
+    for origin in cors_origins.split(",")
+    if origin.strip()
+]
+
+logger.info(f"CORS Origins: {allowed_origins}")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_credentials=True,
     allow_origins=allowed_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )

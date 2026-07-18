@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Crown, Check, Loader2 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "../lib/api";
@@ -23,36 +23,48 @@ export default function Billing() {
   const [polling, setPolling] = useState(false);
 
   // Handle return from Stripe
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const sid = params.get("session_id");
     if (sid && location.pathname.endsWith("/success")) {
       pollStatus(sid);
     }
-  }, [location]);
+  }, [location, pollStatus]);
 
-  const pollStatus = async (sid, attempts = 0) => {
-    if (attempts === 0) setPolling(true);
-    if (attempts >= 6) { setPolling(false); toast.error("Payment status check timed out"); return; }
-    try {
-      const r = await api.get(`/billing/status/${sid}`);
-      if (r.data.payment_status === "paid") {
-        setPolling(false);
-        toast.success("🎉 Welcome to Pro!");
-        // refresh user data
-        const me = await api.get("/auth/me");
-        localStorage.setItem("rm_user", JSON.stringify(me.data.user));
-        setTimeout(() => navigate("/app"), 1500);
-        return;
-      }
-      if (r.data.status === "expired") {
-        setPolling(false); toast.error("Session expired"); return;
-      }
-      setTimeout(() => pollStatus(sid, attempts + 1), 2000);
-    } catch {
-      setTimeout(() => pollStatus(sid, attempts + 1), 2000);
+const pollStatus = useCallback(async (sid, attempts = 0) => {
+  if (attempts === 0) setPolling(true);
+  if (attempts >= 6) {
+    setPolling(false);
+    toast.error("Payment status check timed out");
+    return;
+  }
+
+  try {
+    const r = await api.get(`/billing/status/${sid}`);
+
+    if (r.data.payment_status === "paid") {
+      setPolling(false);
+      toast.success("🎉 Welcome to Pro!");
+
+      const me = await api.get("/auth/me");
+      localStorage.setItem("rm_user", JSON.stringify(me.data.user));
+
+      setTimeout(() => navigate("/app"), 1500);
+      return;
     }
-  };
+
+    if (r.data.status === "expired") {
+      setPolling(false);
+      toast.error("Session expired");
+      return;
+    }
+
+    setTimeout(() => pollStatus(sid, attempts + 1), 2000);
+  } catch {
+    setTimeout(() => pollStatus(sid, attempts + 1), 2000);
+  }
+}, [navigate]);
 
   const upgrade = async () => {
     setLoading(true);

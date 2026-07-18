@@ -3,7 +3,6 @@ ResearchMind AI — LLM service using Google Gemini.
 """
 
 from __future__ import annotations
-from anthropic import AsyncAnthropic
 
 import json
 import os
